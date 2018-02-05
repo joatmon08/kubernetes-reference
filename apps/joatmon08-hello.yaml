@@ -1,0 +1,41 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: joatmon08-hello
+spec:
+  selector:
+    matchLabels:
+      run: joatmon08-hello
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: joatmon08-hello
+    spec:
+      containers:
+      - name: joatmon08-hello
+        image: joatmon08/hello
+        ports:
+        - containerPort: 8001
+          protocol: TCP
+          name: http
+        - containerPort: 8002
+          protocol: TCP
+          name: metric
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: joatmon08-hello
+  labels:
+    run: joatmon08-hello
+spec:
+  ports:
+  - port: 8001
+    protocol: TCP
+    name: http
+  - port: 8002
+    protocol: TCP
+    name: metric
+  selector:
+    run: joatmon08-hello
