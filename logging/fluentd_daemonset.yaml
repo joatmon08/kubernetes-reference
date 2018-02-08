@@ -2,7 +2,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: fluentd-config
+  name: fluentdconf
+  namespace: kube-system
 data:
   fluent.conf: |
     <match fluent.**>
@@ -40,35 +41,45 @@ data:
       @type stdout
     </match>
 ---
-apiVersion: apps/v1beta2
-kind: Deployment
+apiVersion: extensions/v1beta1
+kind: DaemonSet
 metadata:
   name: fluentd
+  namespace: kube-system
+  labels:
+    k8s-app: fluentd-logging
+    version: v1
+    kubernetes.io/cluster-service: "true"
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      run: fluentd
   template:
     metadata:
       labels:
-        run: fluentd
+        k8s-app: fluentd-logging
+        version: v1
+        kubernetes.io/cluster-service: "true"
     spec:
       containers:
       - name: fluentd
-        image: fabric8/fluentd-kubernetes
+        image: fluent/fluentd-kubernetes-daemonset:v0.12-alpine-elasticsearch
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
         volumeMounts:
-        - name: config-volume
-          mountPath: /etc/fluent/
+        - name: fluentconfig
+          mountPath: /fluentd/etc/
         - name: varlog
           mountPath: /var/log
         - name: varlibdockercontainers
           mountPath: /var/lib/docker/containers
           readOnly: true
+      terminationGracePeriodSeconds: 30
       volumes:
-      - name: config-volume
+      - name: fluentconfig
         configMap:
-          name: fluentd-config
+          name: fluentdconf
       - name: varlog
         hostPath:
           path: /var/log
