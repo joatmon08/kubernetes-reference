@@ -12,13 +12,12 @@ data:
 
     <source>
       @type tail
-      path "/var/log/containers/*.log"
-      pos_file /var/log/containers/logz-pos-containers.log.pos
-      exclude_path ["/var/log/containers/*.log.pos"]
+      path /var/log/containers/*.log
+      pos_file /var/log/fluentd-containers.log.pos
       time_format %Y-%m-%dT%H:%M:%S.%NZ
-      keep_time_key true
       tag kubernetes.*
       format json
+      read_from_head true
     </source>
 
     <filter kubernetes.**>
