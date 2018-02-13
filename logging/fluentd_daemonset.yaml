@@ -24,15 +24,11 @@ data:
       @type kubernetes_metadata
     </filter>
 
-    <match kubernetes.var.log.containers.**_default_fluentd-**.log>
+    <match kubernetes.var.log.containers.**fluentd**.log>
       @type null
     </match>
 
-    <match kubernetes.var.log.containers.**_kube-system_**.log>
-      @type null
-    </match>
-
-    <match kubernetes.var.log.containers.**_istio-system_**.log>
+    <match kubernetes.var.log.containers.**kube-system**.log>
       @type null
     </match>
 
