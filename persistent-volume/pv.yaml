@@ -1,0 +1,13 @@
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: pvc-f2617ebf-3e0b-11e8-b2b3-080027732cee
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/tmp/hostpath-provisioner/pvc-f2617ebf-3e0b-11e8-b2b3-080027732cee"
