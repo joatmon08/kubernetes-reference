@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-. $(dirname ${BASH_SOURCE})/util.sh
+. ../util.sh
 
 desc "Create the StatefulSet."
 run "kubectl apply -f statefulset.yaml"
