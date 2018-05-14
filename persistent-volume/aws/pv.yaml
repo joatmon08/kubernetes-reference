@@ -4,12 +4,12 @@ kind: PersistentVolume
 metadata:
   name: joatmon08-pv
 spec:
+  storageClassName: gp2
   accessModes:
   - ReadWriteOnce
-  awsElasticBlockStore:
-    fsType: ext4
-    volumeID: aws://{{ AWS region }}/{{ volume ID }}
   capacity:
     storage: 1Gi
   persistentVolumeReclaimPolicy: Delete
-  storageClassName: gp2
+  awsElasticBlockStore:
+    fsType: ext4
+    volumeID: aws://{{ AWS region }}/{{ volume ID }}
