@@ -54,6 +54,7 @@ desc "Let's restore the volume with our snapshot."
 run "aws ec2 create-volume --availability-zone=${REGION}a --snapshot-id ${snapshotID} --region=${REGION} --volume-type gp2 --tag-specifications 'ResourceType=volume,Tags=[{Key=KubernetesCluster,Value=joatmon08.k8s.local}]'"
 
 desc "Let's add the new volume ID to the pv.yaml and create it."
+desc "!!!! BE SURE TO ADD THE AWS REGION AND VOLUME ID TO THE pv.yaml FILE !!!!"
 run "kubectl apply -f pv.yaml"
 
 desc "Let's apply the pv claim."
@@ -62,6 +63,9 @@ run "kubectl apply -f pv-claim.yaml"
 desc "We'll delete the old pvc and pv."
 run "kubectl delete pvc ${pvc}"
 run "kubectl delete pv ${volume}"
+
+desc "Let's create the StatefulSet."
+run "kubectl apply -f statefulset-restore.yaml"
 
 desc "Does it show the original state?"
 run "kubectl exec ${pod} -- cat /usr/share/hello/stateful.log"
